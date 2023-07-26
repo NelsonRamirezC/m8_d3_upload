@@ -39,6 +39,20 @@
     </form>
 </section>
 
+<section class="listdadoProductos">
+    <h2 class="text-center">listado de productos.</h2>
+        {{#each productos}}
+        <img src="/public/uploads/{{this.imagen}}" alt="{{this.nombre}}">
+        {{/each}}
+
+</section>
+
+<style>
+    .listdadoProductos img{
+        width:200px;
+    }
+</style>
+
 
 <script>
     let formAddProducto = document.getElementById("formAddProducto");
@@ -58,6 +72,7 @@
 
             if(result.code == 201){
                 alert(result.message);
+                location.reload();
             }else {
                 alert(result.message);
             }

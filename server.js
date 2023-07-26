@@ -19,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(upload()); //req.files
 
+//ruta publica
+app.use("/public", express.static(path.resolve(__dirname, "./public")));
+
 
 //configuración de handlebars
 
