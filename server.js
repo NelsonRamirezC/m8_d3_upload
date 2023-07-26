@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { create } from "express-handlebars";
 import upload from "express-fileupload";
+import helmet from "helmet";
 
 //importación de rutas
 import viewsRoutes from "./routes/views.routes.js";
@@ -14,6 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 //middlewares generales
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
