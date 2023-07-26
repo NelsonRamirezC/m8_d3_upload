@@ -39,11 +39,16 @@
     </form>
 </section>
 
-<section class="listdadoProductos">
-    <h2 class="text-center">listado de productos.</h2>
-        {{#each productos}}
-        <img src="/public/uploads/{{this.imagen}}" alt="{{this.nombre}}">
-        {{/each}}
+<section class="listadoProductos">
+    {{#if productos}}
+        <h2 class="text-center">listado de productos.</h2>
+        {{>table 
+        productos = productos
+        }}
+
+    {{else}}
+        <h2 class="text-center">No hay productos para mostrar.</h2>
+    {{/if}}
 </section>
 
 <link rel="stylesheet" href="/public/assets/css/crudProductos.css">
