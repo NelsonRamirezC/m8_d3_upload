@@ -1,0 +1,70 @@
+<h1 class="text-center py-3">CRUD PRODUCTOS</h1>
+
+<section>
+    <form id="formAddProducto" action="/api/productos" method="post" enctype="multipart/form-data">
+        <div class="mb-3 row">
+            <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="nombre" required/>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="descripcion" required/>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="precio" class="col-sm-2 col-form-label">Precio</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="precio" min="0" required/>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="stock" class="col-sm-2 col-form-label">Stock</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="stock" min="0" required/>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="imagen" class="col-sm-2 col-form-label">Imagen</label>
+            <div class="col-sm-10">
+                <input type="file" class="form-control" name="imagen"/>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary">Crear</button>
+        </div>
+    </form>
+</section>
+
+
+<script>
+    let formAddProducto = document.getElementById("formAddProducto");
+
+    formAddProducto.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        try{
+            let data = new FormData(formAddProducto);
+
+            let response = await (fetch("/api/productos", {
+                method: "POST",
+                body: data
+            }));
+
+            let result = await response.json();
+
+            if(result.code == 201){
+                alert(result.message);
+            }else {
+                alert(result.message);
+            }
+
+        }catch(error){
+            alert("Ha ocurrido un error al crear el producto.");
+        }
+
+    })
+</script>
