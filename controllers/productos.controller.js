@@ -40,3 +40,40 @@ export const create = async (req, res) => {
         })
     }
 };
+
+export const deleteById = async (req, res) => {
+    let id = req.params.id;
+    try {
+        let producto = await Producto.findByPk(id);
+        if (!producto) {
+            return res.status(404).json({
+                code: 404,
+                message: `No fue posible encontrar un producto con el id: ${id}`,
+            });
+        }
+
+        //SI PRODUCTO EXISTE...
+        uploadsMiddleware
+            .deleteImage(producto.imagen)
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.log("Error eliminar imagen servicio cloud", error);
+            })
+        
+        await producto.destroy();
+        res.status(200).json({
+            code: 200,
+            message: `Producto con ID:${id}, eliminado con éxito.`,
+        });
+
+    } catch (error) {
+        console.log("Error elimiar producto", error)
+        res.status(500).json({
+            code: 500,
+            message: `Producto no pudo ser eliminado con id: ${id}`,
+        });
+    }
+
+}

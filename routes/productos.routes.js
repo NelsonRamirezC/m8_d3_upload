@@ -6,5 +6,6 @@ import * as middlewares from "../middlewares/uplodadImage.middleware.js";
 const router = Router();
 
 router.post("/", middlewares.uploadImage, controllers.create);
+router.delete("/:id", controllers.deleteById);
 
 export default router;
