@@ -5,7 +5,7 @@ import "./models/Producto.model.js";
 
 const main = async () => {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({force: false, alter: true});
     app.listen(3000, () => {
         console.log("Servidor escucha en puerto 3000.")
     })

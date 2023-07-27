@@ -1,7 +1,16 @@
-import { v4 as uuid } from "uuid";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 import * as path from "path";
 import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+});
 
 export const uploadImage = (req, res, next) => {
 
@@ -31,31 +40,43 @@ export const uploadImage = (req, res, next) => {
                  )}]`,
              });
         }
-
-        let nombreImagen = `IMG-${uuid().slice(0, 6)}.${extension}`;
-        let pathDestino = path.resolve(
-            __dirname,
-            "../public/uploads/",
-            nombreImagen
-        );
-
-        imagen.mv(pathDestino, (error) => {
+        
+        cloudinary.uploader.upload_stream({ resource_type: "auto" }, (error, result) => {
             if (error) {
-                return res.status(500).json({
-                    code: 500,
-                    message:
-                        "Se produjo un error al intentar guardar la imagen en el servidor.",
-                });
+                return res
+                    .status(500)
+                    .json({
+                        code: 500,
+                        message: "Error al subir la imagen al servidor.",
+                    });
             }
 
-            req.imagen = nombreImagen;
-            req.pathDetinoImagen = pathDestino;
-            next();
+            console.log(result);
 
-        });
+            req.imagen = result.public_id;
+            req.rutaImagen = result.secure_url;
+
+            next();
+        }).end(imagen.data);
+
 
     } else {
         next();
     }
 
 };
+
+
+export const deleteImage = (imagenId) => {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.destroy(imagenId, (error, result) => {
+            if (error) {
+                    reject("error al eliminar la imagen del servidor de cloudinary.")
+            }
+            return console.log(
+                resolve("Imagen eliminada correctamente del servicio de cloudinary.")
+            );
+        });
+    })
+}
+

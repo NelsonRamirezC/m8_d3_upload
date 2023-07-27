@@ -1,19 +1,21 @@
 import Producto from "../models/Producto.model.js";
-import * as path from "path";
-import { fileURLToPath } from "url";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-import fs from "fs";
+import * as uploadsMiddleware from "../middlewares/uplodadImage.middleware.js";
 
 export const create = async (req, res) => {
     try {
         let { nombre, descripcion, precio, stock } = req.body;
+
+
+        /* req.imagen = result.public_id;
+        req.rutaImagen = result.secure_url; */
 
         let nuevoProducto = await Producto.create({
             nombre,
             descripcion,
             precio,
             stock,
-            imagen: req.imagen
+            imagen: req.imagen, // req.imagen corresponde al nombre public - public id de la imagen
+            rutaImagen: req.rutaImagen // corresponde a la ruta cloud donde se almacena la imagen
         });
 
         return res.status(201).json({
@@ -24,16 +26,17 @@ export const create = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        fs.unlink(req.pathDetinoImagen, (error) => {
-            if(error){
-                console.log("No se pudo eliminar la imagen");
-            } else {
-                console.log("imagen eliminada con éxito.");
-            }
-        });
-        res.status(500).json({
-            code: 500,
-            message: "Producto no pudo ser creado.",
-        });
+        //si no se crea el producto, lo eliminamos del servicio cloud
+
+        uploadsMiddleware.deleteImage(req.imagen).then(result => {
+            console.log(result)
+        }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            res.status(500).json({
+                code: 500,
+                message: "Producto no pudo ser creado.",
+            });
+        })
     }
 };

@@ -36,6 +36,14 @@ const Producto = sequelize.define(
                 notEmpty: true,
             },
         },
+        rutaImagen: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "/public/uploads/producto.jpg",
+            validate: {
+                notEmpty: true,
+            },
+        },
     },
     {
         tableName: "Productos",

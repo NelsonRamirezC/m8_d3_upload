@@ -12,7 +12,7 @@
     {{#each productos}}
     <tr>
       <th scope="row">{{this.id}}</th>
-      <td><img src="/public/uploads/{{this.imagen}}" alt="{{this.nombre}}"></td>
+      <td><img src="{{this.rutaImagen}}" alt="{{this.nombre}}"></td>
       <td>{{this.nombre}}</td>
       <td>{{this.precio}}</td>
       <td>{{this.stock}}</td>

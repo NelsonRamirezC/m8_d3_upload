@@ -15,7 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 //middlewares generales
-app.use(
+/* app.use(
     helmet.contentSecurityPolicy({
         directives: {
             ...helmet.contentSecurityPolicy.getDefaultDirectives(),
@@ -23,7 +23,7 @@ app.use(
             "style-src": ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
         },
     })
-);
+); */
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: true })); //req.body
 app.use(cors()); // next
