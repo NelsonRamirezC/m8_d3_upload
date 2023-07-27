@@ -24,9 +24,9 @@ app.use(
         },
     })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(express.json()); //req.body
+app.use(express.urlencoded({ extended: true })); //req.body
+app.use(cors()); // next
 app.use(upload()); //req.files
 
 //ruta publica

@@ -10,7 +10,7 @@ formAddProducto.addEventListener("submit", async (event) => {
             method: "POST",
             body: data,
         });
-
+        
         let result = await response.json();
 
         if (result.code == 201) {
