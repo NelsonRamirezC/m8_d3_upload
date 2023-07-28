@@ -78,15 +78,68 @@ export const deleteById = async (req, res) => {
 
 }
 
+export const update = async (req, res) => {
+    let { id, nombre, descripcion, precio, stock } = req.body;
 
-export const update = (req, res) => {
-    let {id, nombre, descripcion, precio, stock } = req.body
     try {
+        //buscamos el producto para saber si existe
+        let producto = await Producto.findByPk(id);
+
+        //si no existe el producto respondemos con un 404
+        if (!producto) {
+            //si existe req.imagen (cuando se carga una imagen para reemplazo) eliminamos la imagen del servicio cloud
+            if (req.imagen) {
+                uploadsMiddleware
+                    .deleteImage(req.imagen)
+                    .then((result) => {
+                        console.log(result);
+                    })
+                    .catch((error) => {
+                        console.log(
+                            "Error eliminar imagen servicio cloud",
+                            error
+                        );
+                    });
+            }
+
+            return res.status(404).json({
+                code: 404,
+                message: `No fue posible encontrar un producto con el id: ${id}`,
+            });
+        }
+
+        //si existe lo actualizamos
+
+        /* req.imagen = result.public_id;
+        req.rutaImagen = result.secure_url; */
+
+        let propiedadesChange = req.body;
+        delete propiedadesChange.id;
+
+        if (req.imagen) {
+            propiedadesChange.imagen = req.imagen;
+            propiedadesChange.rutaImagen = req.rutaImagen;
+
+            //eliminar la imagen antigua del servicio cloud
+            uploadsMiddleware
+                .deleteImage(producto.imagen)
+                .then((result) => {
+                    console.log(result);
+                })
+                .catch((error) => {
+                    console.log("Error eliminar imagen servicio cloud", error);
+                });
+        }
+
+        await producto.update(propiedadesChange);
+
         res.status(201).json({
             code: 201,
             message: "Producto actualizado con éxito.",
         });
+
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             code: 500,
             message: `Producto con id: ${id}, no pudo ser actualizado `,
