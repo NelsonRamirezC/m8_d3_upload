@@ -77,3 +77,19 @@ export const deleteById = async (req, res) => {
     }
 
 }
+
+
+export const update = (req, res) => {
+    let {id, nombre, descripcion, precio, stock } = req.body
+    try {
+        res.status(201).json({
+            code: 201,
+            message: "Producto actualizado con éxito.",
+        });
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            message: `Producto con id: ${id}, no pudo ser actualizado `,
+        });
+    }
+};

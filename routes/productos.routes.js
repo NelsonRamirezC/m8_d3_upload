@@ -7,5 +7,6 @@ const router = Router();
 
 router.post("/", middlewares.uploadImage, controllers.create);
 router.delete("/:id", controllers.deleteById);
+router.put("/", middlewares.uploadImage, controllers.update);
 
 export default router;
