@@ -15,6 +15,8 @@ formLogin.addEventListener("submit", async (event) => {
 
         if (result.code == 200) {
             alert(result.message);
+            localStorage.setItem("token", result.token);
+            localStorage.setItem("usuario", JSON.stringify(result.usuario));
             location.href = "/";
         } else {
             alert(result.message);

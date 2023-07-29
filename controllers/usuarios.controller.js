@@ -33,25 +33,11 @@ export const create = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        let { email, password, } = req.body;
-        
-        let usuario = await Usuario.findOne({
-            email,
-            password,
-        });
-
-        console.log(usuario);
-
-        if (!usuario) {
-            return res.status(400).json({
-                code: 400,
-                message: "Email y/o password incorrecto.",
-            });
-        }
-
-        return res.status(200).json({
+        res.status(200).json({
             code: 200,
             message: "Login correcto.",
+            token: req.token,
+            usuario: req.usuario
         });
 
     } catch (error) {
