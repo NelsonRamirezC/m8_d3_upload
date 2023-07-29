@@ -7,6 +7,7 @@ import helmet from "helmet";
 //importación de rutas
 import viewsRoutes from "./routes/views.routes.js";
 import productosRoutes from "./routes/productos.routes.js";
+import usuariosRoutes from "./routes/usuarios.routes.js";
 
 import * as path from "path";
 import { fileURLToPath } from "url";
@@ -50,6 +51,7 @@ app.use("/", viewsRoutes);
 
 //endpoints
 app.use("/api/productos", productosRoutes);
+app.use("/api/usuarios", usuariosRoutes);
 
 app.all("*", (req, res) => {
     res.status(404).send("Ruta desconocida.");

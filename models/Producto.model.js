@@ -7,12 +7,20 @@ const Producto = sequelize.define(
         nombre: {
             type: DataTypes.STRING(50),
             allowNull: false,
-            notEmpty: true,
+            validate: {
+                notEmpty: {
+                    msg: "Campo nombre no permite guardar valores vacíos.",
+                },
+            },
         },
         descripcion: {
             type: DataTypes.STRING(500),
             allowNull: false,
-            notEmpty: true,
+            validate: {
+                notEmpty: {
+                    msg: "Campo descripción no permite guardar valores vacíos.",
+                },
+            },
         },
         precio: {
             type: DataTypes.DECIMAL(11, 2),

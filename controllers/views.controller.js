@@ -12,3 +12,12 @@ export const crudProductos = async (req, res) => {
         productos
     });
 };
+
+export const login = (req, res) => {
+    res.render("login");
+};
+
+export const registro = (req, res) => {
+    res.render("registro");
+};
+

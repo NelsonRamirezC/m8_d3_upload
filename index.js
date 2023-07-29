@@ -2,6 +2,7 @@ import app from "./server.js";
 import sequelize from "./database/database.js";
 
 import "./models/Producto.model.js";
+import "./models/Usuario.model.js";
 
 const main = async () => {
     await sequelize.authenticate();

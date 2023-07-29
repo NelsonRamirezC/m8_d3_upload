@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="/public/assets/css/loginRegistro.css">
+
+<section>
+    <div class="login-page bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                  <h3 class="mb-3">Registro de usuario:</h3>
+                    <div class="bg-white shadow rounded">
+                        <div class="row">
+                            <div class="col-md-7 pe-0">
+                                <div class="form-left h-100 py-5 px-5">
+                                    <form action="" class="row g-4" id="formRegistro">
+                                            <div class="col-12">
+                                                <label>Nombre<span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-text"><i class="bi bi-person-circle"></i></div>
+                                                    <input type="text" class="form-control" placeholder="Ingresa tu nombre..." name="nombre" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Email<span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-text"><i class="bi bi-envelope-at-fill"></i></div>
+                                                    <input type="email" class="form-control" placeholder="Enter Email" name="email" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label>Password<span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                                                    <input type="password" class="form-control" placeholder="Enter Password" name="password" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Reply Password <span class="text-danger" id="labelReplyPassword">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                                                    <input type="password" class="form-control" placeholder="Enter Reply Password" name="replyPassword" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary px-4 float-end mt-4">Registro</button>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-5 ps-0 d-none d-md-block">
+                                <div class="form-right h-100 bg-primary text-white text-center pt-5">
+                                    <i class="bi bi-bootstrap"></i>
+                                    <h2 class="fs-1">Welcome Back!!!</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script src="/public/assets/js/registro.js"></script>
