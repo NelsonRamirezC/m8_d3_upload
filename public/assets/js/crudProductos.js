@@ -1,18 +1,14 @@
 let formAddProducto = document.getElementById("formAddProducto");
 let btnCrear = document.getElementById("btnCrear");
-let spinner = document.querySelector("#btnCrear .spinner-border");
-let statusButtonCrear = document.querySelector("#btnCrear .statusButton");
+let btnCrearLoading = document.getElementById("btnCrearLoading");
 let messageCrearProducto = document.querySelector(".messageCrearProducto");
 
-console.log(btnCrear, spinner);
 formAddProducto.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     try {
-        btnCrear.setAttribute("disabled", "");
-        spinner.classList.remove("d-none");
-        statusButtonCrear.innerText = "Creando producto.";
-        messageCrearProducto.innerText = "";
+        btnCrear.classList.toggle("d-none");
+        btnCrearLoading.classList.toggle("d-none");
 
         let data = new FormData(formAddProducto);
 
@@ -32,6 +28,8 @@ formAddProducto.addEventListener("submit", async (event) => {
             messageCrearProducto.classList.add("text-success");
             messageCrearProducto.innerText = result.message;
 
+            btnCrear.classList.toggle("d-none");
+            btnCrearLoading.classList.toggle("d-none");
             setTimeout(() => {
                 location.reload();
             }, 1500);
@@ -41,9 +39,6 @@ formAddProducto.addEventListener("submit", async (event) => {
             messageCrearProducto.innerText = result.message;
         }
 
-        btnCrear.removeAttribute("disabled");
-        spinner.classList.add("d-none");
-        statusButtonCrear.innerText = "Crear";
     } catch (error) {
         console.log(error);
         alert("Ha ocurrido un error al crear el producto.");

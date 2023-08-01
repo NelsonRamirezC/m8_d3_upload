@@ -4,30 +4,57 @@ let btnsUpdate = document.querySelectorAll(".tableCrud .btnUpdate");
 
 //LÓGICA PARA ELIMINAR PRODUCTOS
 btnsDelete.forEach((buttonDelete) => {
-    buttonDelete.addEventListener("click", async (event) => {
+    buttonDelete.addEventListener("click", (event) => {
         let id = buttonDelete.dataset.id;
         console.log(id);
 
         try {
-            let confirmacion = confirm(
-                `Desea eliminar el producto con id: ${id}?`
-            );
-            if (!confirmacion) return;
-            var myHeaders = new Headers();
+
+            Swal.fire({
+                title: `Estás seguro que deseas eliminar el producto con ID: ${id}?`,
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Eliminar",
+                denyButtonText: `No eliminar`,
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    var myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${token}`);
 
             let response = await fetch(`/api/productos/${id}`, {
                 method: "delete",
-                headers: myHeaders
+                headers: myHeaders,
             });
             let result = await response.json();
 
             if (result.code == 200) {
-                alert(result.message);
-                location.reload();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: result.message,
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok!",
+                }).then(() => {
+                    location.reload();
+                })
             } else {
-                alert(result.message);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: result.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
+
+
+
+                } else if (result.isDenied) {
+                    Swal.fire("Producto no ha sido eliminado.", "", "info");
+                }
+            });
+            
         } catch (error) {
             alert("Error al intentar eliminar el producto con id: " + id);
         }
@@ -58,22 +85,31 @@ formUpdateProducto.addEventListener("submit", async (event) => {
         let data = new FormData(formUpdateProducto);
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
-        
+
         let response = await fetch("/api/productos", {
             method: "put",
             body: data,
-            headers: myHeaders
-        })
+            headers: myHeaders,
+        });
 
         let result = await response.json();
 
         if (result.code == 201) {
-            alert(result.message);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: result.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
             location.reload();
         } else {
-            alert(result.message);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: result.message,
+            });
         }
-
     } catch (error) {
         alert("Error al intentar actualizar el producto.");
     }
