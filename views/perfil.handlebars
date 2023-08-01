@@ -1,0 +1,10 @@
+<h1 class="text-center py-3">Perfil del usuario.</h1>
+
+{{#if error}}
+    <h2 class="text-center">{{error}}</h2>
+{{else}}
+    <h2 class="text-center">Datos de usuario:</h2>
+    <p>ID: {{usuario.id}}</p>
+    <p>Nombre: {{usuario.nombre}}</p>
+    <p>Email: {{usuario.email}}</p>
+{{/if}}
