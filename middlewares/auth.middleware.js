@@ -73,10 +73,18 @@ export const verifyToken = async (req, res, next) => {
         } else if (token) {
             dataToken = await verificacionToken(token);
         } else {
-            return res.status(401).json({
-                code: 401,
-                message: "debe estar autenticado para ingresar a la vista.",
-            });
+            //incluir lógica para vista
+            let path = req.route.path;
+
+            if (path.includes("api")) {
+                return res.status(401).json({
+                    code: 401,
+                    message: "debe estar autenticado para acceder al recurso.",
+                });
+            } else {
+                req.error = "debe estar autenticado para acceder al recurso.";
+                return next();
+            }
         }
         let usuario = await Usuario.findByPk(dataToken.data.id, {
             attributes: ["id", "nombre", "email", "admin"],
@@ -84,7 +92,7 @@ export const verifyToken = async (req, res, next) => {
 
         usuario = usuario.toJSON();
         req.usuario = usuario;
-        next();
+        return next();
     } catch (error) {
         console.log(error);
         let code = 500;
@@ -94,9 +102,16 @@ export const verifyToken = async (req, res, next) => {
             code = error.code;
             errorMessage = error.errorMessage;
         }
-        res.status(code).json({
-            code,
-            message: errorMessage,
-        });
+        //incluir lógica para vista
+        let path = req.route.path;
+        if (path.includes("api")) {
+            return res.status(code).json({
+                code,
+                message: errorMessage,
+            });
+        } else {
+            req.error = errorMessage;
+            return next();
+        }
     }
 };

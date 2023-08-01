@@ -6,12 +6,17 @@ export const home = (req, res) => {
 };
 
 export const crudProductos = async (req, res) => {
-
-    let productos = await Producto.findAll();
-    productos = productos.map(producto => producto.toJSON());
-    res.render("crudProductos", {
-        productos
-    });
+    if (req.error) {
+        res.render("crudProductos", {
+            error: req.error,
+        });
+    } else {
+        let productos = await Producto.findAll();
+        productos = productos.map((producto) => producto.toJSON());
+        res.render("crudProductos", {
+            productos,
+        });
+    }
 };
 
 export const login = (req, res) => {
@@ -24,29 +29,39 @@ export const registro = (req, res) => {
 
 export const perfil = async (req, res) => {
 
-    if (req.usuario) {
+    if (req.error) {
         res.render("perfil", {
-            usuario: req.usuario,
+            error: req.error
         });
     } else {
-        res.render("perfil", {
-            error: "Usuario no se encuentra en el sistema, verifique si aún tiene cuenta."
-        })
+        if (req.usuario) {
+            res.render("perfil", {
+                usuario: req.usuario,
+            });
+        } else {
+            res.render("perfil", {
+                error: "Usuario no se encuentra en el sistema, verifique si aún tiene cuenta.",
+            });
+        }
     }
-
 };
-
 
 export const misPublicaciones = async (req, res) => {
-    if (req.usuario) {
+
+    if (req.error) {
         res.render("misPublicaciones", {
-            usuario: req.usuario,
+            error: req.error,
         });
     } else {
-        res.render("misPublicaciones", {
-            error: "Usuario no se encuentra en el sistema, verifique si aún tiene cuenta.",
-        });
+        if (req.usuario) {
+            res.render("misPublicaciones", {
+                usuario: req.usuario,
+            });
+        } else {
+            res.render("misPublicaciones", {
+                error: "Usuario no se encuentra en el sistema, verifique si aún tiene cuenta.",
+            });
+        }
     }
+
 };
-
-

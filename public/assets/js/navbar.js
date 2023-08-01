@@ -26,3 +26,27 @@ linkLogout.addEventListener("click", (event) => {
     localStorage.clear();
     location.href = "/";
 });
+
+const manejadorSendToken = (ruta) => {
+    try {
+        if (token) {
+            location.href = `${ruta}?token=${token}`
+        } else {
+            alert("no existe un token para continuar a la ruta.")
+        }
+        
+    } catch (error) {
+        alert("Error al intentar entrar a una ruta protegida, debe existir un token.");
+    }
+
+}
+linkCrudProductos.addEventListener("click", (event) => {
+    event.preventDefault();
+    manejadorSendToken(linkCrudProductos.dataset.ruta);
+
+});
+linkPerfil.addEventListener("click", (event) => {
+    event.preventDefault();
+    manejadorSendToken(linkPerfil.dataset.ruta);
+});
+

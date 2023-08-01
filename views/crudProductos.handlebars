@@ -1,5 +1,9 @@
 <h1 class="text-center py-3">CRUD PRODUCTOS</h1>
 
+{{#if error}}
+    <h2 class="text-center">{{error}}</h2>
+{{else}}
+
 <section>
     <form id="formAddProducto" action="/api/productos" method="post" enctype="multipart/form-data">
         <div class="mb-3 row">
@@ -54,3 +58,4 @@
 <link rel="stylesheet" href="/public/assets/css/crudProductos.css">
 
 <script src="/public/assets/js/crudProductos.js"></script>
+{{/if}}

@@ -6,9 +6,16 @@ formAddProducto.addEventListener("submit", async (event) => {
     try {
         let data = new FormData(formAddProducto);
 
+        var myHeaders = new Headers();
+        myHeaders.append(
+            "Authorization",
+            `Bearer ${token}`
+        );
+
         let response = await fetch("/api/productos", {
             method: "POST",
             body: data,
+            headers: myHeaders
         });
         
         let result = await response.json();

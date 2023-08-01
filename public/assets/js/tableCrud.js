@@ -13,9 +13,12 @@ btnsDelete.forEach((buttonDelete) => {
                 `Desea eliminar el producto con id: ${id}?`
             );
             if (!confirmacion) return;
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${token}`);
 
             let response = await fetch(`/api/productos/${id}`, {
                 method: "delete",
+                headers: myHeaders
             });
             let result = await response.json();
 
@@ -53,9 +56,13 @@ formUpdateProducto.addEventListener("submit", async (event) => {
 
     try {
         let data = new FormData(formUpdateProducto);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${token}`);
+        
         let response = await fetch("/api/productos", {
             method: "put",
-            body: data
+            body: data,
+            headers: myHeaders
         })
 
         let result = await response.json();
