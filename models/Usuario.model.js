@@ -13,6 +13,16 @@ const Usuario = sequelize.define(
                 },
             },
         },
+        run: {
+            type: DataTypes.STRING(13),
+            allowNull: false,
+            unique: true,
+            validate: {
+                notEmpty: {
+                    msg: "Campo run no permite guardar valores vacíos.",
+                },
+            },
+        },
         email: {
             type: DataTypes.STRING(50),
             allowNull: false,
@@ -26,12 +36,19 @@ const Usuario = sequelize.define(
             },
         },
         password: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(500),
             allowNull: false,
             validate: {
                 notEmpty: {
                     msg: "Campo nombre no permite guardar valores vacíos.",
                 },
+            },
+        },
+        fechaNacimiento: {
+            type: DataTypes.DATEONLY,
+            allowNull: false,
+            validate: {
+                isDate: true,
             },
         },
         admin: {

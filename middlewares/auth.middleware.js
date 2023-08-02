@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import Usuario from "../models/Usuario.model.js";
+import bcrypt from "bcrypt";
 
 export const emitToken = async (req, res, next) => {
     try {
@@ -8,9 +9,8 @@ export const emitToken = async (req, res, next) => {
         let usuario = await Usuario.findOne({
             where: {
                 email,
-                password,
             },
-            attributes: ["id", "nombre", "email", "admin"],
+            attributes: ["id", "nombre", "run", "email", "admin", "password", "fechaNacimiento"],
         });
 
         if (!usuario) {
@@ -18,6 +18,17 @@ export const emitToken = async (req, res, next) => {
                 code: 400,
                 message: "Email y/o password incorrecto.",
             });
+        }
+
+        let validacionPassword = bcrypt.compareSync(password, usuario.password); 
+
+        if (!validacionPassword) {
+            return res.status(400).json({
+                code: 400,
+                message: "Email y/o password incorrecto.",
+            });
+        } else {
+            delete usuario.password;
         }
 
         let token = jwt.sign(
@@ -87,7 +98,7 @@ export const verifyToken = async (req, res, next) => {
             }
         }
         let usuario = await Usuario.findByPk(dataToken.data.id, {
-            attributes: ["id", "nombre", "email", "admin"],
+            attributes: ["id", "nombre", "run", "email", "admin", "fechaNacimiento"],
         });
 
         usuario = usuario.toJSON();
