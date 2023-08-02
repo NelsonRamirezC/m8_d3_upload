@@ -10,6 +10,12 @@ router.get("/login", controllers.login);
 router.get("/registro", controllers.registro);
 router.get("/perfil", auth.verifyToken, controllers.perfil);
 router.get("/mispublicaciones", auth.verifyToken, controllers.misPublicaciones);
+router.get(
+    "/monitor/usuarios",
+    auth.verifyToken,
+    admin.verificar,
+    controllers.monitorUsuarios
+);
 
 //rutas protegidas
 router.get("/crud_productos", auth.verifyToken, admin.verificar, controllers.crudProductos);

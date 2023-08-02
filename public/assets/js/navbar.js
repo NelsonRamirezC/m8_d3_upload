@@ -4,6 +4,7 @@ let linkLogin = document.getElementById("linkLogin");
 let linkRegistro = document.getElementById("linkRegistro");
 let linkLogout = document.getElementById("linkLogout");
 let linkPerfil = document.getElementById("linkPerfil");
+let linkMonitorUsuarios = document.getElementById("linkMonitorUsuarios");
 let navbarBrand = document.getElementById("navbarBrand");
 
 if (token) {
@@ -13,6 +14,7 @@ if (token) {
     navbarBrand.innerText = usuario.email;
     if (usuario.admin) {
         linkCrudProductos.style.display = "block";
+        linkMonitorUsuarios.style.display = "block";
     }
 } else {
     linkLogout.style.display = "none";
@@ -50,3 +52,7 @@ linkPerfil.addEventListener("click", (event) => {
     manejadorSendToken(linkPerfil.dataset.ruta);
 });
 
+linkMonitorUsuarios.addEventListener("click", (event) => {
+    event.preventDefault();
+    manejadorSendToken(linkMonitorUsuarios.dataset.ruta);
+});

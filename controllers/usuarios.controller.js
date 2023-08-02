@@ -53,3 +53,23 @@ export const login = async (req, res) => {
         });
     }
 };
+
+export const findUsers = async (req, res) => {
+    //let filtros = {};
+    try {
+        let usuarios = await Usuario.findAll({
+            attributes: {
+                exclude: ["password"],
+            },
+            filtros
+        });
+
+        res.json({code: 200, usuarios})
+        
+    } catch (error) {
+        res.status(500).json({
+            code: 500,
+            message: "No fue posible obtener la información de usuarios.",
+        });
+    }
+}

@@ -79,3 +79,17 @@ export const misPublicaciones = async (req, res) => {
     }
 
 };
+
+
+export const monitorUsuarios = async (req, res) => {
+    if (req.error) {
+        res.render("monitorUsuarios", {
+            error: req.error,
+            viewMonitorUsuarios: true,
+        });
+    } else {
+        res.render("monitorUsuarios", {
+            viewMonitorUsuarios: true,
+        });
+    }
+}

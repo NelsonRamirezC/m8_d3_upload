@@ -8,19 +8,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link {{#if viewHome}}active{{/if}}" href="/">Home</a>
+          <a class="nav-link{{#if viewHome}} active{{/if}}" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if viewPerfil}}active{{/if}}" href="" data-ruta="/perfil" id="linkPerfil">Perfil</a>
+          <a class="nav-link{{#if viewPerfil}} active{{/if}}" href="" data-ruta="/perfil" id="linkPerfil">Perfil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if viewCrudProductos}}active{{/if}}" href="" data-ruta="/crud_productos" id="linkCrudProductos" style="display:none;">CRUD Productos</a>
+          <a class="nav-link{{#if viewCrudProductos}} active{{/if}}" href="" data-ruta="/crud_productos" id="linkCrudProductos" style="display:none;">CRUD Productos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if viewLogin}}active{{/if}}" href="/login" id="linkLogin">Login</a>
+          <a class="nav-link{{#if viewMonitorUsuarios}} active{{/if}}" href="" data-ruta="/monitor/usuarios" id="linkMonitorUsuarios" style="display:none;">Monitor Usuarios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{#if viewRegistro}}active{{/if}}" href="/registro" id="linkRegistro">Registro</a>
+          <a class="nav-link{{#if viewLogin}} active{{/if}}" href="/login" id="linkLogin">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{{#if viewRegistro}} active{{/if}}" href="/registro" id="linkRegistro">Registro</a>
         </li>
          <li class="nav-item">
           <a class="nav-link" href="" id="linkLogout">Logout</a>
