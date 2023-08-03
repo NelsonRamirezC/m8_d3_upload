@@ -105,7 +105,6 @@ export const verifyToken = async (req, res, next) => {
         req.usuario = usuario;
         return next();
     } catch (error) {
-        console.log(error);
         let code = 500;
         let errorMessage = "Error en proceso de autenticación";
 

@@ -53,8 +53,9 @@ app.use("/", viewsRoutes);
 app.use("/api/productos", productosRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 
-app.all("*", (req, res) => {
+app.all("/api/*", (req, res) => {
     res.status(404).send("Ruta desconocida.");
 })
+
 
 export default app;

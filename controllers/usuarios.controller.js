@@ -1,5 +1,6 @@
 import Usuario from "../models/Usuario.model.js";
-import bcrypt from"bcrypt";
+import bcrypt from "bcrypt";
+import { Op } from "sequelize";
 
 export const create = async (req, res) => {
     try {
@@ -55,21 +56,58 @@ export const login = async (req, res) => {
 };
 
 export const findUsers = async (req, res) => {
-    //let filtros = {};
+    let { email, run } = req.query;
+    let filtros = {};
+
+    //filtro por email
+    if (email) {
+        filtros.email = {
+            [Op.iLike]: `%${email}%`,
+        };
+    }
+
+    //filtro por run
+    if (run) {
+        filtros.run = {
+            [Op.iLike]: `%${run}%`,
+        };
+    }
+
+    //filtro por cuando sólo existe fecha de inicio
+    if (fechaInicio && !fechaTermino) {
+        filtros.run = {
+            [Op.iLike]: `%${run}%`,
+        };
+        //filtro cuando sólo existe fecha de termino
+    } else if (!fechaInicio && fechaTermino) {
+
+        //filtro cuando existe fecha de inicio y termino
+    } else if (fechaInicio && fechaTermino) {
+
+    }
+
+
+
+
     try {
         let usuarios = await Usuario.findAll({
             attributes: {
                 exclude: ["password"],
             },
-            filtros
+            where: filtros
         });
 
         res.json({code: 200, usuarios})
         
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             code: 500,
             message: "No fue posible obtener la información de usuarios.",
         });
     }
 }
+
+
+//sequelize-auto
+

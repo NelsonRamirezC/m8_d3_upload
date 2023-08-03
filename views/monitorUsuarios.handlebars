@@ -1,21 +1,67 @@
 <h1 class="text-center py-3">Monitor de usuarios.</h1>
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Run</th>
-      <th scope="col">Fecha Nacimiento</th>
-      <th scope="col">Email</th>
-      <th scope="col">Admin</th>
-    </tr>
-  </thead>
-  <tbody id="bodyTableMonitor">
-    
-  </tbody>
-</table>
+{{#if error}}
+  <h2 class="text-center">Contenido no pudo ser procesado.</h2>
+  <script>
+    setTimeout(()=> {
+      localStorage.clear();
+      location.href = "/login";
+    }, 2000)
+      
+  </script>
+{{else}}
+
+<style>
+  .filtros .form-control{
+    display: inline-block;
+    margin: 0 5px;
+  }
+</style>
+<section class="filtros">
+  <form id="formFiltros">
+    <div class="row g3-2">
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="email" class="form-label">Email: </label>
+        <input class="form-control" type="text" name="email" placeholder="example@gmail.com">
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="run" class="form-label">Run: </label>
+        <input class="form-control" type="text" name="run" placeholder="1.111.111-1">
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+        <input class="form-control" type="text" name="fechaInicio" placeholder="2000-01-01">
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="fechaTermino" class="form-label">Fecha término </label>
+        <input class="form-control" type="text" name="fechaTermino" placeholder="2020-12-30">
+      </div>
+      
+    </div>
+    <div>
+        <button class="btn btn-primary mt-3">Filtrar</button>
+    </div>
+  </form>
+</section>
+
+<section class="overflow-x-auto">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col" style="min-width: 110px;">Run</th>
+        <th scope="col">Fecha Nacimiento</th>
+        <th scope="col">Email</th>
+        <th scope="col">Admin</th>
+      </tr>
+    </thead>
+    <tbody id="bodyTableMonitor">
+      
+    </tbody>
+  </table>
+</section>
 
 {{!-- SE DEBE CREAR ARCHIVO --}}
 <script src="/public/assets/js/monitorUsuarios.js"></script>
@@ -63,4 +109,50 @@ const main = async () => {
 }
 
 main();
+
+
+//enviar consulta usuarios con filtro
+
+let formFiltros = document.getElementById("formFiltros");
+
+formFiltros.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try{
+      
+    let data= new FormData(formFiltros);
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    let pathUrl = "/api/usuarios?"
+
+    if(data.get("email")){
+      pathUrl+= `email=${data.get("email")}&`
+    }
+    if(data.get("run")){
+      pathUrl+= `run=${data.get("run")}&`
+    }
+
+
+    let response = await fetch(pathUrl, {
+      method:"get",
+      headers: myHeaders
+    })
+
+    let result = await response.json();
+
+    if(result.code == 200){
+      cargarDatosTabla(result.usuarios);
+    }else {
+      alert(result.message);
+    }
+
+  }catch(error){
+    console.log(error);
+    alert("Error al obtener la data de usuarios.");  
+  }
+
+})
 </script>
+{{/if}}
+
