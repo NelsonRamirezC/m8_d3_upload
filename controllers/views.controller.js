@@ -1,10 +1,26 @@
 import Producto from "../models/Producto.model.js";
 import Usuario from "../models/Usuario.model.js";
+import sequelize from "../database/database.js";
 
-export const home = (req, res) => {
-    res.render("home", {
-        viewHome: true
-    });
+export const home = async (req, res) => {
+    try {
+        let [results, metadata] = await sequelize.query(`
+            select count(*) as cantidad from "Usuarios"
+            where admin = false
+            group by admin;
+        `);
+        let cantidadUsuarios = results[0].cantidad;
+
+        res.render("home", {
+            viewHome: true,
+            cantidadUsuarios,
+        });
+    } catch (error) {
+        res.render("home", {
+            viewHome: true,
+            error: "Problemas el contenido de la web, intente más tarde / esto ha sido reportado.",
+        });
+    }
 };
 
 export const crudProductos = async (req, res) => {
@@ -36,7 +52,6 @@ export const registro = (req, res) => {
 };
 
 export const perfil = async (req, res) => {
-
     if (req.error) {
         res.render("perfil", {
             error: req.error,
@@ -58,7 +73,6 @@ export const perfil = async (req, res) => {
 };
 
 export const misPublicaciones = async (req, res) => {
-
     if (req.error) {
         res.render("misPublicaciones", {
             error: req.error,
@@ -77,9 +91,7 @@ export const misPublicaciones = async (req, res) => {
             });
         }
     }
-
 };
-
 
 export const monitorUsuarios = async (req, res) => {
     if (req.error) {
@@ -92,4 +104,4 @@ export const monitorUsuarios = async (req, res) => {
             viewMonitorUsuarios: true,
         });
     }
-}
+};

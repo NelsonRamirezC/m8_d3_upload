@@ -56,48 +56,53 @@ export const login = async (req, res) => {
 };
 
 export const findUsers = async (req, res) => {
-    let { email, run } = req.query;
-    let filtros = {};
-
-    //filtro por email
-    if (email) {
-        filtros.email = {
-            [Op.iLike]: `%${email}%`,
-        };
-    }
-
-    //filtro por run
-    if (run) {
-        filtros.run = {
-            [Op.iLike]: `%${run}%`,
-        };
-    }
-
-    //filtro por cuando sólo existe fecha de inicio
-    if (fechaInicio && !fechaTermino) {
-        filtros.run = {
-            [Op.iLike]: `%${run}%`,
-        };
-        //filtro cuando sólo existe fecha de termino
-    } else if (!fechaInicio && fechaTermino) {
-
-        //filtro cuando existe fecha de inicio y termino
-    } else if (fechaInicio && fechaTermino) {
-
-    }
-
-
-
-
+    let { email, run, fechaInicio, fechaTermino } = req.query;
+    console.log(req.query)
     try {
-        let usuarios = await Usuario.findAll({
+
+        let filtros = {};
+
+         //filtro por email
+         if (email) {
+             filtros.email = {
+                 [Op.substring]: email
+             };
+         }
+
+         //filtro por run
+         if (run) {
+             filtros.run = {
+                 [Op.substring]: run
+             };
+         }
+
+         //filtro por cuando sólo existe fecha de inicio
+         if (fechaInicio && !fechaTermino) {
+             filtros.fechaNacimiento = {
+                 [Op.gte]: fechaInicio,
+             };
+             //filtro cuando sólo existe fecha de termino
+         } else if (!fechaInicio && fechaTermino) {
+             filtros.fechaNacimiento = {
+                 [Op.lte]: fechaTermino,
+             };
+             //filtro cuando existe fecha de inicio y termino
+         } else if (fechaInicio && fechaTermino) {
+             filtros.fechaNacimiento = {
+                 [Op.between]: [fechaInicio, fechaTermino],
+             };
+         }
+
+
+        let { count, rows: usuarios } = await Usuario.findAndCountAll({
+            order: [["id", "ASC"]],
             attributes: {
                 exclude: ["password"],
             },
-            where: filtros
+            where: filtros,
         });
 
-        res.json({code: 200, usuarios})
+        res.json({code: 200, usuarios, registros: count})
         
     } catch (error) {
         console.log(error)

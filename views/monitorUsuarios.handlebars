@@ -60,6 +60,12 @@
     <tbody id="bodyTableMonitor">
       
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6">Cantidad de registros encontrados: <span id="cantidadRegistros"></span></trd>
+      </tr>
+      
+  </tfoot>
   </table>
 </section>
 
@@ -68,91 +74,101 @@
 
 <script>
 
-const cargarDatosTabla = (usuarios = []) => {
-  let filas = "";
-  let bodyTable = document.getElementById("bodyTableMonitor");
-  bodyTable.innerHTML = "";
-    usuarios.forEach(usuario =>{
-      filas += `
-        <tr>
-          <th scope="row">${usuario.id}</th>
-          <td>${usuario.nombre}</td>
-          <td>${usuario.run}</td>
-          <td>${usuario.fechaNacimiento}</td>
-          <td>${usuario.email}</td>
-          <td>${usuario.admin}</td>
-        </tr>
-      `
-    })
+  let cantidadRegistros = document.getElementById("cantidadRegistros");
+  
+  const cargarDatosTabla = (usuarios = [], registros) => {
+    let filas = "";
+    let bodyTable = document.getElementById("bodyTableMonitor");
+    bodyTable.innerHTML = "";
+      usuarios.forEach(usuario =>{
+        filas += `
+          <tr>
+            <th scope="row">${usuario.id}</th>
+            <td>${usuario.nombre}</td>
+            <td>${usuario.run}</td>
+            <td>${usuario.fechaNacimiento}</td>
+            <td>${usuario.email}</td>
+            <td>${usuario.admin}</td>
+          </tr>
+        `
+      })
 
-    bodyTable.innerHTML = filas;
-}
+      bodyTable.innerHTML = filas;
+      cantidadRegistros.innerText = registros;
+  }
 
 
-const main = async () => {
-  try{
+  const main = async () => {
+    try{
+        
+      let response = await fetch("/api/usuarios?token="+token)
+
+      let result = await response.json();
+
+      if(result.code == 200){
+        cargarDatosTabla(result.usuarios, result.registros);
+      }else {
+        alert(result.message);
+      }
+
       
-    let response = await fetch("/api/usuarios?token="+token)
-
-    let result = await response.json();
-
-    if(result.code == 200){
-      cargarDatosTabla(result.usuarios);
-    }else {
-      alert(result.message);
+    }catch(error){
+      alert("Error al obtener la data de usuarios.");  
     }
+  }
 
+  main();
+
+
+  //enviar consulta usuarios con filtro
+
+  let formFiltros = document.getElementById("formFiltros");
+
+  formFiltros.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try{
+        
+      let data= new FormData(formFiltros);
+
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+
+      let pathUrl = "/api/usuarios?"
+
+      if(data.get("email")){
+        pathUrl+= `email=${data.get("email")}&`
+      }
+      if(data.get("run")){
+        pathUrl+= `run=${data.get("run")}&`
+      }
+      if(data.get("fechaInicio")){
+        pathUrl+= `fechaInicio=${data.get("fechaInicio")}&`
+      }
+      if(data.get("fechaTermino")){
+        pathUrl+= `fechaTermino=${data.get("fechaTermino")}&`
+      }
+
+
+      let response = await fetch(pathUrl, {
+        method:"get",
+        headers: myHeaders
+      })
+
+      let result = await response.json();
+
+      if(result.code == 200){
     
-  }catch(error){
-    alert("Error al obtener la data de usuarios.");  
-  }
-}
+        cargarDatosTabla(result.usuarios, result.registros);
+      }else {
+        alert(result.message);
+      }
 
-main();
-
-
-//enviar consulta usuarios con filtro
-
-let formFiltros = document.getElementById("formFiltros");
-
-formFiltros.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try{
-      
-    let data= new FormData(formFiltros);
-
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token}`);
-
-    let pathUrl = "/api/usuarios?"
-
-    if(data.get("email")){
-      pathUrl+= `email=${data.get("email")}&`
-    }
-    if(data.get("run")){
-      pathUrl+= `run=${data.get("run")}&`
+    }catch(error){
+      console.log(error);
+      alert("Error al obtener la data de usuarios.");  
     }
 
-
-    let response = await fetch(pathUrl, {
-      method:"get",
-      headers: myHeaders
-    })
-
-    let result = await response.json();
-
-    if(result.code == 200){
-      cargarDatosTabla(result.usuarios);
-    }else {
-      alert(result.message);
-    }
-
-  }catch(error){
-    console.log(error);
-    alert("Error al obtener la data de usuarios.");  
-  }
-
-})
-</script>
+  })
+  </script>
 {{/if}}
 
